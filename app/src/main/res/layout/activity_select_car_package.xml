@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vivekapps.avtodock_new.selectCarPackageActivity">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:dividerHeight="1dp"
+        android:divider="#358ad9"
+        android:listSelector="#358ad9"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:id="@+id/carPackageSelectListView"
+        android:visibility="visible"
+         />
+
+    <ListView
+        android:id="@+id/carPackageExtraDetailListView"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/carPackageSelectListView"
+        android:headerDividersEnabled="true"
+        android:footerDividersEnabled="true"
+        android:visibility="visible"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/carPackageProceedButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Proceed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carPackageExtraDetailListView" />
+
+</android.support.constraint.ConstraintLayout>
