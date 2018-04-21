@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class carPackageExtraDetailAdapter extends BaseAdapter {
     String[] carPackageEDDetails;
     String[] carPackageEDPrice;
     LayoutInflater inflater;
+    public static boolean isExtraDetailSelected=false;
 
     public carPackageExtraDetailAdapter(Context applicationContext, String[] carPackageEDName, String[] carPackageEDDetails, String[] carPackageEDPrice) {
         this.context = applicationContext;
@@ -52,6 +54,17 @@ public class carPackageExtraDetailAdapter extends BaseAdapter {
         carPackEDDetails.setText(carPackageEDDetails[i]);
         TextView carPackEDPrice = (TextView) view.findViewById(R.id.carPackageExtraDetailPrice);
         carPackEDPrice.setText(carPackageEDPrice[i]);
+
+        final CheckBox cbExtraDetail = (CheckBox)view.findViewById(R.id.carPackageExtraDetailCB);
+        isExtraDetailSelected = false;
+        cbExtraDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cbExtraDetail.isChecked()) {
+                    isExtraDetailSelected = true;
+                }
+            }
+        });
         return view;
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,8 +30,9 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class carOrderBookingActivity extends AppCompatActivity {
 
-    String carType;
+    String carType,selectedCarPackage;
     String[] carPackagePrice;
+    boolean isCarExtraDetailSelected;
     Button carOrderBookButton;
     EditText carOrderName,carOrderEmail,carOrderPhone,carOrderAddress;
     double latitude,longitude;
@@ -52,15 +54,22 @@ public class carOrderBookingActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         carType = bundle.getString("carType");
         carPackagePrice = bundle.getStringArray("carPackagePrice");
+        selectedCarPackage = bundle.getString("selectedCarPackage");
+        Log.i("carOrderBookingActivity","Selected Package is: "+selectedCarPackage);
+        isCarExtraDetailSelected = bundle.getBoolean("isCarExtraDetailSelected");
+        Log.i("carOrderBookingActivity","Extra Detailing value is:"+String.valueOf(isCarExtraDetailSelected));
+
+        //Create Booking Info table
+        updateBookingInfo();
 
         //Create Add location button
         locationLayout = (TableLayout) findViewById(R.id.tableLayoutLocation);
         addLocation();
 
-        carOrderName = (EditText) findViewById(R.id.carOrderName);
-        carOrderEmail = (EditText) findViewById(R.id.carOrderEmail);
-        carOrderPhone = (EditText) findViewById(R.id.carOrderPhone);
-        carOrderAddress = (EditText) findViewById(R.id.carOrderAddress);
+        carOrderName = (EditText) findViewById(R.id.custNameEditText);
+        carOrderEmail = (EditText) findViewById(R.id.custEMailEditText);
+        carOrderPhone = (EditText) findViewById(R.id.custPhoneEditText);
+        carOrderAddress = (EditText) findViewById(R.id.custAddressEditText);
 
         carOrderBookButton = (Button) findViewById(R.id.carOrderBookButton);
         carOrderBookButton.setOnClickListener(new View.OnClickListener() {
@@ -105,12 +114,7 @@ public class carOrderBookingActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //NavUtils.navigateUpFromSameTask(this);
-                Intent backToCarPackIntent = new Intent(getApplicationContext(),selectCarPackageActivity.class);
-                Bundle backToCarPackBundle = new Bundle();
-                backToCarPackBundle.putStringArray("carPackagePrice",carPackagePrice);
-                backToCarPackBundle.putString("carType",carType);
-                backToCarPackIntent.putExtras(backToCarPackBundle);
-                startActivity(backToCarPackIntent);
+                navigateToPacakgeSelection();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -140,6 +144,8 @@ public class carOrderBookingActivity extends AppCompatActivity {
     private void addLocation() {
 
         locationLayout.removeAllViews();
+//        locationLayout.setBackgroundColor(Color.DKGRAY);
+//        locationLayout.setPadding(0,1,0,0);
         addLocationText = new TextView(this);
         addLocationText.setText("Add Location");
         addLocationText.setGravity(Gravity.CENTER);
@@ -167,24 +173,19 @@ public class carOrderBookingActivity extends AppCompatActivity {
     private void clearLocation(TableLayout layout) {
 
         layout.removeAllViews();
+        locationLayout.setBackgroundColor(Color.WHITE);
 
         layout.setStretchAllColumns(true);
+        layout.setPadding(0,1,0,0);
         tableRow = new TableRow(carOrderBookingActivity.this);
-        tableRow.setBackgroundColor(Color.WHITE);
-        tableRow.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-
-        /*DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) getApplicationContext()
-                .getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        int deviceWidth = displayMetrics.widthPixels;
-        int viewWidth = deviceWidth / 2;*/
+        tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
 
         removeLocationText = new TextView(carOrderBookingActivity.this);
         removeLocationText.setText("Remove Location");
         removeLocationText.setTextColor(Color.BLUE);
         removeLocationText.setGravity(Gravity.RIGHT);
-        removeLocationText.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 100));
+        removeLocationText.setPadding(0,0,40,0);
+        removeLocationText.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
         removeLocationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,11 +195,85 @@ public class carOrderBookingActivity extends AppCompatActivity {
 
         TextView locationAddedMsg = new TextView(carOrderBookingActivity.this);
         locationAddedMsg.setText("Your Location Added");
-        locationAddedMsg.setGravity(Gravity.LEFT);
-        locationAddedMsg.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 100));
+        locationAddedMsg.setGravity(Gravity.CENTER_VERTICAL);
+        locationAddedMsg.setPadding(40,0,0,0);
+
+        locationAddedMsg.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
 
         tableRow.addView(locationAddedMsg);
         tableRow.addView(removeLocationText);
         layout.addView(tableRow);
+    }
+
+    private void updateBookingInfo() {
+
+        float bookingInfoTextSize = 12.0f;
+
+        TableLayout bookingDetailTable = (TableLayout) findViewById(R.id.bookingInfoTablelayout);
+        TableRow bookingDetailRow = (TableRow) findViewById(R.id.bookingInfoDetailsRow);
+        bookingDetailRow.setWeightSum(3f);
+
+        TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,1f);
+        params.setMargins(40,0,40,0);
+
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setColor(Color.TRANSPARENT);
+        shape.setStroke(2,Color.CYAN);
+        shape.setCornerRadius(15.0f);
+
+        TextView carTypeBookingInfo = new TextView(carOrderBookingActivity.this);
+        carTypeBookingInfo.setLayoutParams(params);
+        carTypeBookingInfo.setBackground(shape);
+        carTypeBookingInfo.setGravity(Gravity.CENTER);
+        carTypeBookingInfo.setTextSize(bookingInfoTextSize);
+        carTypeBookingInfo.setText(carType.toUpperCase());
+
+        GradientDrawable shapePackageType = new GradientDrawable();
+        shapePackageType.setShape(GradientDrawable.RECTANGLE);
+        shapePackageType.setColor(Color.TRANSPARENT);
+        shapePackageType.setStroke(2,Color.CYAN);
+        shapePackageType.setCornerRadius(15.0f);
+
+        TextView carPackageTypeBookingInfo = new TextView(carOrderBookingActivity.this);
+        carPackageTypeBookingInfo.setLayoutParams(params);
+        carPackageTypeBookingInfo.setBackground(shapePackageType);
+        carPackageTypeBookingInfo.setGravity(Gravity.CENTER);
+        carPackageTypeBookingInfo.setTextSize(bookingInfoTextSize);
+        carPackageTypeBookingInfo.setText(selectedCarPackage.toUpperCase());
+
+        if (isCarExtraDetailSelected) {
+            GradientDrawable shapeExtraDetail = new GradientDrawable();
+            shapeExtraDetail.setShape(GradientDrawable.RECTANGLE);
+            shapeExtraDetail.setColor(Color.TRANSPARENT);
+            shapeExtraDetail.setStroke(2,Color.CYAN);
+            shapeExtraDetail.setCornerRadius(15.0f);
+
+            TextView carExtraDetailSelectedInfo = new TextView(carOrderBookingActivity.this);
+            carExtraDetailSelectedInfo.setLayoutParams(params);
+            carExtraDetailSelectedInfo.setBackground(shapeExtraDetail);
+            carExtraDetailSelectedInfo.setGravity(Gravity.CENTER);
+            carExtraDetailSelectedInfo.setTextSize(bookingInfoTextSize);
+            carExtraDetailSelectedInfo.setText("Car Detailing".toUpperCase());
+            bookingDetailRow.addView(carExtraDetailSelectedInfo);
+        }
+
+        bookingDetailRow.addView(carTypeBookingInfo);
+        bookingDetailRow.addView(carPackageTypeBookingInfo);
+
+    }
+
+    public void goBackToPackage(View view) {
+        navigateToPacakgeSelection();
+    }
+
+    private void navigateToPacakgeSelection() {
+        Intent backToCarPackIntent = new Intent(getApplicationContext(),selectCarPackageActivity.class);
+        Bundle backToCarPackBundle = new Bundle();
+        backToCarPackBundle.putStringArray("carPackagePrice",carPackagePrice);
+        backToCarPackBundle.putString("carType",carType);
+        backToCarPackIntent.putExtras(backToCarPackBundle);
+        startActivity(backToCarPackIntent);
     }
 }

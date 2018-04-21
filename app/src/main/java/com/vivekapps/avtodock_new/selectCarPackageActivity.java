@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class selectCarPackageActivity extends AppCompatActivity {
 
@@ -49,12 +50,20 @@ public class selectCarPackageActivity extends AppCompatActivity {
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent carOrderBookingIntent = new Intent(getApplicationContext(),carOrderBookingActivity.class);
-                Bundle carOrderBookingBundle = new Bundle();
-                carOrderBookingBundle.putString("carType",carType);
-                carOrderBookingBundle.putStringArray("carPackagePrice",carPackagePrice);
-                carOrderBookingIntent.putExtras(carOrderBookingBundle);
-                startActivity(carOrderBookingIntent);
+                if (selectCarPackageAdapter.selectedPackage < 0) {
+                    Toast.makeText(getApplicationContext(),"Select any Package",Toast.LENGTH_SHORT).show();
+                } else {
+                    String selectedCarPackage = carPackageName[selectCarPackageAdapter.selectedPackage];
+                    boolean isCarExtraDetailSelected = carPackageExtraDetailAdapter.isExtraDetailSelected;
+                    Intent carOrderBookingIntent = new Intent(getApplicationContext(),carOrderBookingActivity.class);
+                    Bundle carOrderBookingBundle = new Bundle();
+                    carOrderBookingBundle.putString("carType",carType);
+                    carOrderBookingBundle.putStringArray("carPackagePrice",carPackagePrice);
+                    carOrderBookingBundle.putString("selectedCarPackage",selectedCarPackage);
+                    carOrderBookingBundle.putBoolean("isCarExtraDetailSelected",isCarExtraDetailSelected);
+                    carOrderBookingIntent.putExtras(carOrderBookingBundle);
+                    startActivity(carOrderBookingIntent);
+                }
             }
         });
     }

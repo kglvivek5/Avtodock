@@ -22,6 +22,7 @@ public class selectCarPackageAdapter extends BaseAdapter {
     String[] carPackagePrice;
     LayoutInflater inflater;
     RadioButton selected = null;
+    public static int selectedPackage;
 
     public selectCarPackageAdapter(Context applicationContext, String[] carPackageName, String[] carPackageDetails, String[] carPackagePrice) {
         this.context = applicationContext;
@@ -47,7 +48,7 @@ public class selectCarPackageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.activity_car_package_selection_list_view, null);
         TextView carPackName = (TextView) view.findViewById(R.id.carPackageName);
         carPackName.setText(carPackageName[i]);
@@ -59,6 +60,7 @@ public class selectCarPackageAdapter extends BaseAdapter {
         TextView carPackPrice = (TextView) view.findViewById(R.id.carPackagePrice);
         carPackPrice.setText(carPackagePrice[i]);
         final RadioButton rbCarPackage = (RadioButton) view.findViewById(R.id.carPackageSelectionRB);
+        selectedPackage = -1;
         rbCarPackage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +69,7 @@ public class selectCarPackageAdapter extends BaseAdapter {
                 }
                 rbCarPackage.setChecked(true);
                 selected = rbCarPackage;
+                selectedPackage = i;
             }
         });
 
