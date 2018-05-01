@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Avtodock_New</string>
+    <string name="app_name">Avtodock</string>
     <string name="title_activity_maps">Map</string>
     <string name="custNameLabelText">Name</string>
     <string name="custEmailLabelText">Email</string>
@@ -7,4 +7,10 @@
     <string name="custAddressLabelText">Address</string>
     <string name="bookingInfoLabelText">Booking Info</string>
     <string name="bookingInfoEditLabelText">EDIT</string>
+    <string name="usernameLabelText">Username</string>
+    <string name="passwordLabelText">Password</string>
+    <string name="signinText">Sign In</string>
+    <string name="navdraweropen">Menu</string>
+    <string name="navdrawerclose">Closed</string>
+
 </resources>
