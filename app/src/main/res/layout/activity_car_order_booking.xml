@@ -11,6 +11,24 @@
     android:layout_height="match_parent"
     tools:context="com.vivekapps.avtodock_new.carOrderBookingActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="106dp"
+        android:layout_height="112dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:elevation="10dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/avtodockColor"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/carOrderBookButton"
         android:layout_width="wrap_content"

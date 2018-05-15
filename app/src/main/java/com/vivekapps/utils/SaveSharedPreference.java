@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import static com.vivekapps.utils.PreferencesUtility.*;
+import static com.vivekapps.utils.BookingUtility.*;
 
 public class SaveSharedPreference {
     static SharedPreferences getPreferences(Context context) {
@@ -33,5 +34,15 @@ public class SaveSharedPreference {
      */
     public static boolean getLoggedStatus(Context context) {
         return getPreferences(context).getBoolean(LOGGED_IN_PREF, false);
+    }
+
+    public static void setUserID(Context context, String userid) {
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.putString(USER_ID_PREF,userid);
+        editor.apply();
+    }
+
+    public static String getUserID(Context context) {
+        return getPreferences(context).getString(USER_ID_PREF,null);
     }
 }

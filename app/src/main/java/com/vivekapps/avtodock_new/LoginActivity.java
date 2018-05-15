@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vivekapps.DTO.LoginDTO;
+import com.vivekapps.DTO.LoginDataDTO;
 import com.vivekapps.utils.LoginServices;
 import com.vivekapps.utils.RetrofitClient;
 import com.vivekapps.utils.SaveSharedPreference;
@@ -109,16 +111,22 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Retrofit retrofit = RetrofitClient.getClient();
         final LoginServices loginServices = retrofit.create(LoginServices.class);
-        Call<Void> call = loginServices.userLogin("login",username,password);
+        Call<LoginDTO> call = loginServices.userLogin("login",username,password);
 
-        call.enqueue(new Callback<Void>() {
+        call.enqueue(new Callback<LoginDTO>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<LoginDTO> call, Response<LoginDTO> response) {
 
                 if (response.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    // Set Logged In statue to 'true'
+                    response.body();
+                    LoginDataDTO[] data = response.body().getData();
+                    String user_id = data[0].getUser_ID();
+                    Log.i("Login","User ID is :"+ user_id);
+                    // Set User id to shared pref
+                    SaveSharedPreference.setUserID(getApplicationContext(),user_id);
+                    // Set Logged In state to 'true'
                     SaveSharedPreference.setLoggedIn(getApplicationContext(), true);
                     Intent intent = new Intent(getApplicationContext(), vehicleTypeSelectionActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
@@ -131,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<LoginDTO> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 Log.e("TAG", "=======onFailure: " + t.toString());

@@ -4,6 +4,8 @@ package com.vivekapps.utils;
  * Created by narasimma on 28/04/18.
  */
 
+import com.vivekapps.DTO.LoginDTO;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -20,11 +22,11 @@ public interface LoginServices {
 
     @FormUrlEncoded
     @POST("Login")
-    Call <Void> userLogin(@Field("request") String request, @Field("name") String name, @Field("password") String password);
+    Call <LoginDTO> userLogin(@Field("request") String request, @Field("name") String name, @Field("password") String password);
 
     @FormUrlEncoded
     @POST("Login")
-    Call <Void> userRegister(@Field("request") String request, @Field("name") String name, @Field("Email") String email,
+    Call <LoginDTO> userRegister(@Field("request") String request, @Field("name") String name, @Field("Email") String email,
                 @Field("Phone") String phone,@Field("password") String password,@Field("Address") String address);
 
 }

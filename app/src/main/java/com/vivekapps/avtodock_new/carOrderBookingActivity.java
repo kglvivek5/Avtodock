@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -27,6 +28,17 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.vivekapps.DTO.BookingDTO;
+import com.vivekapps.utils.BookingServices;
+import com.vivekapps.utils.RetrofitClient;
+import com.vivekapps.utils.SaveSharedPreference;
+
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class carOrderBookingActivity extends AppCompatActivity {
 
@@ -41,6 +53,8 @@ public class carOrderBookingActivity extends AppCompatActivity {
     TableLayout locationLayout;
     TableRow tableRow;
     private final static int PLACE_PICKER_REQUEST = 1000;
+    String user_id;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +73,9 @@ public class carOrderBookingActivity extends AppCompatActivity {
         isCarExtraDetailSelected = bundle.getBoolean("isCarExtraDetailSelected");
         Log.i("carOrderBookingActivity","Extra Detailing value is:"+String.valueOf(isCarExtraDetailSelected));
 
+        //Fetch user id from Shared pref
+        user_id = SaveSharedPreference.getUserID(getApplicationContext());
+
         //Create Booking Info table
         updateBookingInfo();
 
@@ -70,15 +87,16 @@ public class carOrderBookingActivity extends AppCompatActivity {
         carOrderEmail = (EditText) findViewById(R.id.custEMailEditText);
         carOrderPhone = (EditText) findViewById(R.id.custPhoneEditText);
         carOrderAddress = (EditText) findViewById(R.id.custAddressEditText);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         carOrderBookButton = (Button) findViewById(R.id.carOrderBookButton);
         carOrderBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String carOrderNameText = carOrderName.getText().toString();
-                String carOrderEmailText = carOrderEmail.getText().toString();
-                String carOrderPhoneText = carOrderPhone.getText().toString();
-                String carOrderAddressText = carOrderAddress.getText().toString();
+                final String carOrderNameText = carOrderName.getText().toString();
+                final String carOrderEmailText = carOrderEmail.getText().toString();
+                final String carOrderPhoneText = carOrderPhone.getText().toString();
+                final String carOrderAddressText = carOrderAddress.getText().toString();
                 if (!carOrderNameText.isEmpty() && !carOrderEmailText.isEmpty() && !carOrderPhoneText.isEmpty()
                         && !carOrderAddressText.isEmpty()) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(carOrderBookingActivity.this);
@@ -87,10 +105,19 @@ public class carOrderBookingActivity extends AppCompatActivity {
                     alertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(getApplicationContext(),"Thanks for your order",Toast.LENGTH_SHORT).show();
-                            Intent launcherActivityIntent = new Intent(getApplicationContext(),vehicleTypeSelectionActivity.class);
-                            launcherActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            getApplicationContext().startActivity(launcherActivityIntent);
+                            HashMap<String,String> bookingDetails = new HashMap<String, String>();
+                            bookingDetails.put("carOrderNameText",carOrderNameText);
+                            bookingDetails.put("carOrderEmailText",carOrderEmailText);
+                            bookingDetails.put("carOrderPhoneText",carOrderPhoneText);
+                            bookingDetails.put("carOrderAddressText",carOrderAddressText);
+                            bookingDetails.put("latitude",String.valueOf(latitude));
+                            bookingDetails.put("longitude",String.valueOf(longitude));
+                            bookingDetails.put("selectedCarPackage",selectedCarPackage);
+                            bookingDetails.put("isCarExtraDetailSelected",String.valueOf(isCarExtraDetailSelected));
+                            bookingDetails.put("carType",carType);
+                            bookingDetails.put("user_id",user_id);
+                            Log.i("carOrderBookingActivity",bookingDetails.toString());
+                            insertBooking(bookingDetails);
                         }
                     });
                     alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -275,5 +302,48 @@ public class carOrderBookingActivity extends AppCompatActivity {
         backToCarPackBundle.putString("carType",carType);
         backToCarPackIntent.putExtras(backToCarPackBundle);
         startActivity(backToCarPackIntent);
+    }
+
+    private void insertBooking(HashMap<String,String> bookingDetails) {
+
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        Retrofit retrofit = RetrofitClient.getClient();
+
+        final BookingServices bookingServices = retrofit.create(BookingServices.class);
+        Call<BookingDTO> call = bookingServices.insertBooking("insert",bookingDetails.get("user_id"),
+                "car",bookingDetails.get("carType"),
+                bookingDetails.get("selectedCarPackage"),bookingDetails.get("isCarExtraDetailSelected"),
+                bookingDetails.get("carOrderAddressText"),bookingDetails.get("latitude"),
+                bookingDetails.get("longitude"),"false");
+
+        call.enqueue(new Callback<BookingDTO>() {
+            @Override
+            public void onResponse(Call<BookingDTO> call, Response<BookingDTO> response) {
+                if (response.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(getApplicationContext(),"Thanks for your order",Toast.LENGTH_SHORT).show();
+                    Intent launcherActivityIntent = new Intent(getApplicationContext(),vehicleTypeSelectionActivity.class);
+                    launcherActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    getApplicationContext().startActivity(launcherActivityIntent);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(getApplicationContext(), "Error while creating order. Please try again later",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookingDTO> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Log.e("CarOrderBookingFailure", "=======onFailure: " + t.toString());
+                t.printStackTrace();
+            }
+
+        });
+
     }
 }
