@@ -12,5 +12,7 @@
     <string name="signinText">Sign In</string>
     <string name="navdraweropen">Menu</string>
     <string name="navdrawerclose">Closed</string>
+    <string name="signuptext">Don\'t you have an account ? <u>Sign up</u></string>
+    <string name="signinhelptext">I have my account <u>Sign In</u></string>
 
 </resources>

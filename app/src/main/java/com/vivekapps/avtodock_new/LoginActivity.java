@@ -32,7 +32,7 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 public class LoginActivity extends AppCompatActivity {
 
     EditText usernameText,passwordText;
-    TextView showPasswordText;
+    TextView showPasswordText,signupLink;
     Button signInButton;
     ConstraintLayout loginForm;
     ProgressBar progressBar;
@@ -86,6 +86,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Intent to Sign Up Activity
+        signupLink = (TextView) findViewById(R.id.signUpLink);
+        signupLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signupIntent = new Intent(getApplicationContext(),signupActivity.class);
+                startActivity(signupIntent);
+            }
+        });
+
     }
 
     /**
@@ -114,7 +124,8 @@ public class LoginActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     Toast.makeText(getApplicationContext(), "Credentials are not Valid.", Toast.LENGTH_SHORT).show();
                 }
             }

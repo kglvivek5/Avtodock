@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".vehicleTypeSelectionActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".vehicleTypeSelectionListView" />
         <activity android:name=".carTypeSelectionActivity">
             <meta-data
@@ -57,15 +57,19 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ourServicesActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ourServicesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".signupActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

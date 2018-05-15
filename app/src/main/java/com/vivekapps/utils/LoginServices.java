@@ -16,14 +16,15 @@ public interface LoginServices {
      * @param name
      * @param password
      */
+    //TODO: Implement username in the request, as of now only name is used and Address has to be removed
+
     @FormUrlEncoded
     @POST("Login")
     Call <Void> userLogin(@Field("request") String request, @Field("name") String name, @Field("password") String password);
 
-    /**
-     * Logout
-     */
-    @POST("logout")
-    Call<Void> logout();
+    @FormUrlEncoded
+    @POST("Login")
+    Call <Void> userRegister(@Field("request") String request, @Field("name") String name, @Field("Email") String email,
+                @Field("Phone") String phone,@Field("password") String password,@Field("Address") String address);
 
 }
