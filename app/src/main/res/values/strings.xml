@@ -14,5 +14,20 @@
     <string name="navdrawerclose">Closed</string>
     <string name="signuptext">Don\'t you have an account ? <u>Sign up</u></string>
     <string name="signinhelptext">I have my account <u>Sign In</u></string>
+    <string name="exteriorcleaning"><![CDATA[<b><font color=#FF0000>Exterior Steam Cleaning</font></b>
+                                        <p><font color=#000000>Removes all dirt from the exterior of the car without any effort.</font></p>
+                                        <p><font color=#000000>No toxic residues left on surfaces.</font></p>
+                                        <p><font color=#000000>Clears windows without streaking.</font></p>
+                                        <p><font color=#000000>Removes wax, tar and other compounds from chrome,
+                                        moldings and bumpers.</font></p>
+                                        <p><font color=#000000>Vinyl tops, wheels, white walls are all cleaned easily, quickly and
+                                        completely.</font></p>]]></string>
+    <string name="interiorcleaning"><![CDATA[<b><font color=#FF0000>Interior Steam Cleaning</font></b>
+                                        <p><font color=#000000>Eliminates odors from pet stains,smoking,mold and mildews.</font></p>
+                                        <p><font color=#000000>Deep clean and freshen fabric quickly and easily.</font></p>
+                                        <p><font color=#000000>Hard to reach areas like dashboards,vents,ashtrays, cup
+                                        holders and armrests are done in a matter of mniutes.</font></p>
+                                        <p><font color=#000000>Leaves surfaces virtually dry as soon as cleaning is
+                                        complete.</font></p>]]></string>
 
 </resources>

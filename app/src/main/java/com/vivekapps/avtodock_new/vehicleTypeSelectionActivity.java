@@ -12,7 +12,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -67,7 +69,7 @@ public class vehicleTypeSelectionActivity extends AppCompatActivity {
     private void setNavigationDrawer() {
         dLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
-        NavigationView navView = (NavigationView) findViewById(R.id.navigation);
+        final NavigationView navView = (NavigationView) findViewById(R.id.navigation);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -75,6 +77,11 @@ public class vehicleTypeSelectionActivity extends AppCompatActivity {
                 if (itemId == R.id.servicesMenu) {
                     Intent ourServicesIntent = new Intent(getApplicationContext(),ourServicesActivity.class);
                     startActivity(ourServicesIntent);
+                    dLayout.closeDrawers();
+                    return true;
+                } else if (itemId == R.id.bookingHistoryMenu) {
+                    Intent bookingHistoryIntent = new Intent(getApplicationContext(), BookingHistory.class);
+                    startActivity(bookingHistoryIntent);
                     dLayout.closeDrawers();
                     return true;
                 } else if (itemId == R.id.logoutMenu) {
@@ -90,7 +97,8 @@ public class vehicleTypeSelectionActivity extends AppCompatActivity {
     private void logout() {
         SaveSharedPreference.setLoggedIn(getApplicationContext(), false);
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
 }

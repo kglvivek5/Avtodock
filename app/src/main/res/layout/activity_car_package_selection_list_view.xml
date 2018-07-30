@@ -22,25 +22,27 @@
         android:id="@+id/carPackageName"
         android:layout_width="117dp"
         android:layout_height="33dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/carPackageDetails"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="#000000"
         android:visibility="visible"
-        android:textColor="#000000"/>
+        app:layout_constraintStart_toEndOf="@+id/carPackageSelectionRB"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/carPackageDetails"
         android:layout_width="317dp"
         android:layout_height="49dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carPackageName"
+        android:textColor="#000000"
         android:visibility="visible"
-        android:textColor="#000000"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carPackageName" />
 
     <TextView
         android:id="@+id/carPackagePrice"

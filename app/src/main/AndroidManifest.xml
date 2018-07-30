@@ -62,14 +62,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ourServicesActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".signupActivity"
+        <activity
+            android:name=".signupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BookingHistory"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".BookingHistoryListView" />
+        <activity android:name=".ourServicesListView"></activity>
     </application>
 
 </manifest>

@@ -184,6 +184,7 @@ public class carOrderBookingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 /*Intent mapsActivityIntent = new Intent(carOrderBookingActivity.this,MapsActivity.class);
                 startActivityForResult(mapsActivityIntent,2);*/
+                addLocationText.setEnabled(false);
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     startActivityForResult(builder.build(carOrderBookingActivity.this), PLACE_PICKER_REQUEST);
@@ -195,6 +196,7 @@ public class carOrderBookingActivity extends AppCompatActivity {
             }
         });
         locationLayout.addView(addLocationText);
+        addLocationText.setEnabled(true);
     }
 
     private void clearLocation(TableLayout layout) {
